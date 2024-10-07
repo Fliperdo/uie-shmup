@@ -31,8 +31,10 @@ namespace shmup
 
         void Update()
         {
+            // Update target position based on input
             targetPosition += new Vector3(input.Move.x, input.Move.y, 0) * (speed * Time.deltaTime);
 
+            // Clamp target position within camera bounds
             var minPlayerX = camera.position.x + minX;
             var maxPlayerX = camera.position.x + maxX;
             var minPlayerY = camera.position.y + minY;
@@ -41,20 +43,23 @@ namespace shmup
             targetPosition.x = Mathf.Clamp(targetPosition.x, minPlayerX, maxPlayerX);
             targetPosition.y = Mathf.Clamp(targetPosition.y, minPlayerY, maxPlayerY);
 
+            // Smoothly move the player to the target position
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, smoothness);
 
-            // roll // https://www.google.com/search?q=what+is+yaw&rlz=1C1ONGR_enUS1064US1064&oq=what+is+yaw&gs_lcrp=EgZjaHJvbWUqDQgAEAAYgwEYsQMYgAQyDQgAEAAYgwEYsQMYgAQyCggBEAAYsQMYgAQyBwgCEAAYgAQyBwgDEAAYgAQyBwgEEAAYgAQyBwgFEAAYgAQyBwgGEAAYgAQyBwgHEAAYgAQyBwgIEAAYgAQyCQgJEAAYChiABNIBCDE2NDhqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8
-            var targetRollAngle = -input.Move.y * rollMultiplier;
-            var currentRoll = transform.localEulerAngles.x;
-            var targetRoll = Mathf.LerpAngle(currentRoll, targetRollAngle, leanSpeed * Time.deltaTime);
-
-            // yaw
+            // Calculate target roll and yaw angles based on input
+            var targetRollAngle = -input.Move.x * rollMultiplier;
             var targetYawAngle = input.Move.y * yawMultiplier;
-            var currentYaw = transform.localEulerAngles.z;
-            var targetYaw = Mathf.LerpAngle(currentYaw, targetYawAngle, leanSpeed * Time.deltaTime);
 
+            // Smoothly interpolate to the target roll and yaw angles
+            var currentRotation = transform.localEulerAngles;
+            var targetRotation = new Vector3(
+                Mathf.LerpAngle(currentRotation.x, targetRollAngle, leanSpeed * Time.deltaTime),
+                0,
+                Mathf.LerpAngle(currentRotation.z, targetYawAngle - 90, leanSpeed * Time.deltaTime)
+            );
 
-            transform.localEulerAngles = new Vector3(targetRoll, 0, targetYaw);
+            // Apply the new rotation
+            transform.localEulerAngles = targetRotation;
         }
     }
 }
