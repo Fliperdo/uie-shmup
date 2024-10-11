@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Utilities;
 
-namespace Shmup
+namespace shmup
 {
     public abstract class Weapon : MonoBehaviour
     {

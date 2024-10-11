@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shmup
+namespace shmup
 {
     public class EnemyWeapon : Weapon
     {

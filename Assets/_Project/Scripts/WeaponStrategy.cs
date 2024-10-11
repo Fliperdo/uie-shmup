@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shmup
+namespace shmup
 {
     public abstract class WeaponStrategy : ScriptableObject
     {

@@ -1,7 +1,7 @@
 using shmup;
 using UnityEngine;
 
-namespace Shmup
+namespace shmup
 {
     public class PlayerWeapon : Weapon
     {

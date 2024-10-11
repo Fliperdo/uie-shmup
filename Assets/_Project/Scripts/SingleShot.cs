@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shmup
+namespace shmup
 {
     [CreateAssetMenu(fileName = "SingleShot", menuName = "Shmup/WeaponStrategy/SingleShot")]
     public class SingleShot : WeaponStrategy

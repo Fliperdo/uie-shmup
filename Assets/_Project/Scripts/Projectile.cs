@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Shmup
+namespace shmup
 {
     public class Projectile : MonoBehaviour
     {
@@ -34,7 +34,7 @@ namespace Shmup
             transform.SetParent(null);
             transform.position += transform.up * (speed * Time.deltaTime);
 
-            //Callback?.Invoke();
+            Callback?.Invoke();
         }
 
         void OnCollisionEnter(Collision collision)

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3994dbc53a47c4439ac1f23895f4362, type: 3}
-  m_Name: SingleShot
+  m_Name: LaserSingleShot
   m_EditorClassIdentifier: 
   damage: 10
   fireRate: 0.5
