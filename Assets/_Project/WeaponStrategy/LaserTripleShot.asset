@@ -16,5 +16,5 @@ MonoBehaviour:
   fireRate: 0.5
   projectileSpeed: 10
   projectileLifetime: 4
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 6558120486171951220, guid: 5c7d873a5bbecb34babdea783b95d2aa, type: 3}
   spreadAngle: 15
