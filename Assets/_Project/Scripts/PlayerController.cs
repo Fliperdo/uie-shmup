@@ -5,7 +5,7 @@ namespace shmup
     public class PlayerController : MonoBehaviour
     {
         public float speed = 5.0f;
-        public float smoothness = 0.5f;
+        public float smoothness = 0.2f;
         public float rollMultiplier = 15.0f;
         public float yawMultiplier = 5.0f;
         public float leanSpeed = 5.0f;
@@ -24,6 +24,10 @@ namespace shmup
         Vector3 currentVelocity;
         Vector3 targetPosition;
 
+        private bool _useMouseInput;
+        private Vector3 _distanceToMove;
+        private Vector3 _previousMousePosition;
+
         void Start()
         {
             input = GetComponent<InputReader>();
@@ -31,8 +35,28 @@ namespace shmup
 
         void Update()
         {
-            // Update target position based on input
-            targetPosition += new Vector3(input.Move.x, input.Move.y, 0) * (speed * Time.deltaTime);
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+            {
+                _useMouseInput = true;
+            }
+            else if (Input.anyKeyDown)
+            {
+                _useMouseInput = false;
+            }
+
+
+            if (_useMouseInput)
+            {
+                var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mousePosition.z = 0;
+                _distanceToMove = mousePosition - transform.position;
+                _distanceToMove = Vector3.ClampMagnitude(_distanceToMove, (speed * Time.deltaTime));
+            }
+            else
+            {
+                _distanceToMove = new Vector3(input.Move.x, input.Move.y, 0) * (speed * Time.deltaTime);
+            }
+            targetPosition += _distanceToMove;
 
             // Clamp target position within camera bounds
             var minPlayerX = camera.position.x + minX;
@@ -40,15 +64,22 @@ namespace shmup
             var minPlayerY = camera.position.y + minY;
             var maxPlayerY = camera.position.y + maxY;
 
+            Debug.Log(targetPosition);
+
             targetPosition.x = Mathf.Clamp(targetPosition.x, minPlayerX, maxPlayerX);
             targetPosition.y = Mathf.Clamp(targetPosition.y, minPlayerY, maxPlayerY);
 
             // Smoothly move the player to the target position
-            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, smoothness);
+            if (_useMouseInput)
+            {
+                transform.position = targetPosition;
+            } else
+            {
+                transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, smoothness);
+            }
 
-            // Calculate target roll and yaw angles based on input
-            var targetRollAngle = -input.Move.x * rollMultiplier;
-            var targetYawAngle = input.Move.y * yawMultiplier;
+            var targetRollAngle = -_distanceToMove.normalized.x * rollMultiplier;
+            var targetYawAngle = _distanceToMove.normalized.y * yawMultiplier;
 
             // Smoothly interpolate to the target roll and yaw angles
             var currentRotation = transform.localEulerAngles;
