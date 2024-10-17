@@ -64,8 +64,6 @@ namespace shmup
             var minPlayerY = camera.position.y + minY;
             var maxPlayerY = camera.position.y + maxY;
 
-            Debug.Log(targetPosition);
-
             targetPosition.x = Mathf.Clamp(targetPosition.x, minPlayerX, maxPlayerX);
             targetPosition.y = Mathf.Clamp(targetPosition.y, minPlayerY, maxPlayerY);
 
